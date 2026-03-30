@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>proto.md — Protocol-Driven Development</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Satoshi:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0906;
+    --bg-2: #111009;
+    --bg-3: #17150f;
+    --bg-card: #1a1810;
+    --border: rgba(128,128,128,0.1);
+    --border-strong: rgba(128,128,128,0.2);
+    --amber: #e8a020;
+    --amber-dim: rgba(232,160,32,0.7);
+    --amber-glow: rgba(232,160,32,0.12);
+    --amber-subtle: rgba(232,160,32,0.06);
+    --text: #e8e2d0;
+    --text-muted: #8a8270;
+    --text-dim: #4a4438;
+    --gray-light: #b0b0b0;
+    --gray-medium: #808080;
+    --gray-dark: #505050;
+    --green: #4a8c5c;
+    --green-bright: #6ab87a;
+    --red: #8c4a4a;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Satoshi', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+
+  body {
+    background: var(--bg);
+    background-image: radial-gradient(ellipse 60% 50% at 30% 40%, rgba(232,160,32,0.04) 0%, transparent 70%);
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 56px;
+    background: rgba(10,9,6,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--amber);
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--text-muted); }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .nav-cta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--gray-light) !important;
+    border: 0.5px solid var(--gray-light) !important;
+    padding: 6px 14px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: background 0.2s !important;
+  }
+
+  .nav-cta:hover { background: rgba(128,128,128,0.12) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 8rem 2rem 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gray-light);
+    background: rgba(128,128,128,0.06);
+    border: 0.5px solid rgba(128,128,128,0.2);
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-bottom: 2.5rem;
+    display: inline-block;
+  }
+
+  .hero-title {
+    font-family: var(--sans);
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    line-height: 1.05;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+    max-width: 900px;
+  }
+
+  .hero-title em {
+    color: var(--amber);
+  }
+
+  .hero-subtitle {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 3rem;
+    max-width: 560px;
+    line-height: 1.8;
+    margin-top: 1.5rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: var(--amber);
+    color: #0a0906;
+    padding: 10px 22px;
+    border-radius: 3px;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    transition: opacity 0.2s;
+  }
+
+  .btn-primary:hover { opacity: 0.85; }
+
+  .btn-secondary {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+  }
+
+  .btn-secondary:hover { color: var(--text); }
+
+  .hero-install {
+    margin-top: 3rem;
+    background: var(--bg-card);
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 16px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-install .prompt { color: var(--amber-dim); }
+  .hero-install .cmd { color: var(--text); }
+
+  /* ── SECTION ── */
+  section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--amber-dim);
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title {
+    font-family: var(--sans);
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .section-title em { color: var(--gray-light); }
+
+  .section-body {
+    font-family: var(--sans);
+    font-size: 16px;
+    color: var(--text-muted);
+    max-width: 600px;
+    line-height: 1.8;
+  }
+
+  hr.divider {
+    border: none;
+    border-top: 0.5px solid var(--border);
+    margin: 0 2rem;
+  }
+
+  /* ── PROBLEM ── */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(128,128,128,0.1);
+    border: 0.5px solid rgba(128,128,128,0.2);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 3rem;
+  }
+
+  .problem-card {
+    background: var(--bg-card);
+    padding: 2.5rem;
+    position: relative;
+  }
+
+  .problem-card::before {
+    content: attr(data-role);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    display: block;
+    margin-bottom: 1.5rem;
+  }
+
+  .problem-card h3 {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    color: var(--text);
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+  }
+
+  .problem-card p {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .problem-code {
+    margin-top: 1.5rem;
+    background: var(--bg-2);
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    padding: 1rem;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--text-dim);
+    overflow-x: auto;
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+
+  .problem-code .bad { color: #7a4a4a; }
+  .problem-code .comment { color: var(--text-dim); }
+  .problem-code .str { color: #6a5a3a; }
+
+  /* ── CONCEPT ── */
+  .concept-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 4rem;
+    align-items: start;
+    margin-top: 3rem;
+  }
+
+  .concept-points { list-style: none; display: flex; flex-direction: column; gap: 0; }
+
+  .concept-point {
+    padding: 1.5rem 0;
+    border-bottom: 0.5px solid var(--border);
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .concept-point:first-child { border-top: 0.5px solid var(--border); }
+
+  .concept-point-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--amber-dim);
+    margin-top: 3px;
+  }
+
+  .concept-point h4 {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .concept-point p {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ── CODE BLOCKS ── */
+  .code-window {
+    background: var(--bg-card);
+    border: 0.5px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .code-window-tabs {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border-bottom: 0.5px solid var(--border);
+    background: var(--bg-2);
+  }
+
+  .tab {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 8px 16px;
+    cursor: pointer;
+    color: var(--text-dim);
+    border-bottom: 1.5px solid transparent;
+    transition: color 0.2s;
+  }
+
+  .tab.active {
+    color: var(--amber);
+    border-bottom-color: var(--amber);
+    background: var(--bg-card);
+  }
+
+  .code-body {
+    padding: 1.5rem;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.8;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--text-muted);
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+
+  /* syntax colors */
+  .s-key { color: var(--gray-light); }
+  .s-val { color: #8ab4a0; }
+  .s-cmt { color: var(--text-dim); }
+  .s-h1  { color: var(--text); font-weight: 600; }
+  .s-h2  { color: var(--text); }
+  .s-slot { color: #e08080; }
+  .s-str { color: #8ab4a0; }
+  .s-kw  { color: var(--gray-medium); }
+  .s-fn  { color: var(--gray-light); }
+  .s-num { color: #c0a070; }
+  .s-ok  { color: var(--green-bright); }
+  .s-err { color: #c07070; }
+
+  /* ── FEATURES ── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(128,128,128,0.1);
+    border: 0.5px solid rgba(128,128,128,0.2);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 3rem;
+  }
+
+  .feature-card {
+    background: var(--bg-card);
+    padding: 2rem;
+  }
+
+  .feature-icon {
+    font-family: var(--mono);
+    font-size: 18px;
+    color: var(--gray-light);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .feature-card h4 {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+  }
+
+  .feature-card p {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  /* ── PHILOSOPHY ── */
+  .philosophy-block {
+    border-left: 1.5px solid var(--gray-medium);
+    padding: 2rem 2.5rem;
+    margin: 3rem 0;
+    background: rgba(128,128,128,0.06);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .philosophy-block blockquote {
+    font-family: var(--sans);
+    font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+    color: var(--text);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    margin-bottom: 1rem;
+  }
+
+  .philosophy-block cite {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gray-medium);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ── GETTING STARTED ── */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 3rem;
+    position: relative;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 2rem;
+    padding: 2rem 0;
+    border-bottom: 0.5px solid var(--border);
+    align-items: start;
+  }
+
+  .step-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    padding-top: 4px;
+  }
+
+  .step h4 {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .step p {
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  .code-inline {
+    background: var(--bg-2);
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    display: block;
+    white-space: pre;
+    overflow-x: auto;
+  }
+
+  /* ── CTA ── */
+  .cta-section {
+    text-align: center;
+    padding: 8rem 2rem;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .cta-section h2 {
+    font-family: var(--sans);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .cta-section h2 em { color: var(--amber); }
+
+  .cta-section p {
+    font-size: 15px;
+    color: var(--text-muted);
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 0.5px solid var(--border);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  footer .logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  footer .logo span { color: var(--amber-dim); }
+
+  footer p {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  @media (max-width: 768px) {
+    .problem-grid, .features-grid { grid-template-columns: 1fr; }
+    .concept-layout { grid-template-columns: 1fr; }
+    .step { grid-template-columns: 48px 1fr; }
+    nav .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#"><span>~/</span>proto.md</a>
+  <ul class="nav-links">
+    <li><a href="#concept">concept</a></li>
+    <li><a href="#syntax">syntax</a></li>
+    <li><a href="#sdk">sdk</a></li>
+    <li><a href="#start">get started</a></li>
+    <li><a href="https://github.com" class="nav-cta">github</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-tag">Protocol-Driven Development</span>
+  <h1 class="hero-title">The prompt is<br />the contract.</h1>
+  <p class="hero-subtitle">
+    Stop hardcoding prompts inside your application logic.<br/>
+    Stop generating them blindly without governance.<br/>
+    Write them as typed, versioned, validated protocols.
+  </p>
+  <div class="hero-actions">
+    <a href="#start" class="btn-primary">Get started →</a>
+    <a href="#concept" class="btn-secondary">What is PDD?</a>
+  </div>
+  <div class="hero-install">
+    <span class="prompt">$</span>
+    <span class="cmd">pip install proto-md</span>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- PROBLEM -->
+<section id="problem">
+  <p class="section-label">// the problem</p>
+  <h2 class="section-title">Two kinds of wrong.</h2>
+  <p class="section-body">
+    There are two broken approaches to prompts in production today. 
+    Neither scales. Neither is maintainable. Both make debugging a nightmare.
+  </p>
+
+  <div class="problem-grid">
+    <div class="problem-card" data-role="// the dinosaur">
+      <h3>Hardcoded<br/>in the logic</h3>
+      <p>
+        The prompt is buried inside Python functions, concatenated with f-strings, 
+        mixed with business logic. Change the behavior? Edit the code. 
+        Refactor the code? Break the behavior. Invisible coupling everywhere.
+      </p>
+      <div class="problem-code"><span class="bad">def</span> analyze(code):
+  <span class="comment"># 400-char string buried here</span>
+  prompt = <span class="str">f"You are an expert..."</span>
+           <span class="str">f"Analyze: {code}"</span>
+           <span class="str">f"Return JSON with..."</span>
+  <span class="comment"># pray it works</span>
+  return llm.call(prompt)</div>
+    </div>
+
+    <div class="problem-card" data-role="// the generator">
+      <h3>Generated<br/>without structure</h3>
+      <p>
+        The prompt is thrown at the AI ad-hoc, with no validation, no output schema, 
+        no versioning. It works once and breaks randomly. 
+        Nobody knows why it changed. Nobody owns it. 
+      </p>
+      <div class="problem-code"><span class="comment"># slack message to the team</span>
+<span class="str">"hey the AI is acting weird today"</span>
+
+<span class="comment"># the 'protocol'</span>
+<span class="str">"gpt make me an analysis 
+  of this code and return
+  something useful thx"</span>
+
+<span class="comment"># production. real. 2024.</span></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- CONCEPT -->
+<section id="concept">
+  <p class="section-label">// the solution</p>
+  <h2 class="section-title">Prompts are infrastructure.</h2>
+  <p class="section-body">
+    Protocol-Driven Development (PDD) treats every prompt as a typed, 
+    validated contract. Written in Markdown. Versioned in Git. 
+    Injected by an SDK that guarantees output schemas.
+  </p>
+
+  <div class="philosophy-block">
+    <blockquote>
+      "If your Dockerfile defines what runs, your protocol.md defines how 
+      your model thinks. One governs the container. The other governs the cognition."
+    </blockquote>
+    <cite>proto.md manifesto</cite>
+  </div>
+
+  <div class="concept-layout">
+    <ul class="concept-points">
+      <li class="concept-point">
+        <span class="concept-point-num">01</span>
+        <div>
+          <h4>Slots, not strings</h4>
+          <p>Dynamic values are declared as typed slots in the .md file. 
+          If your code tries to inject a slot that doesn't exist, the build fails.</p>
+        </div>
+      </li>
+      <li class="concept-point">
+        <span class="concept-point-num">02</span>
+        <div>
+          <h4>Constraints as law</h4>
+          <p>The protocol defines hard rules the model must follow. 
+          The SDK enforces them before returning the response to your application.</p>
+        </div>
+      </li>
+      <li class="concept-point">
+        <span class="concept-point-num">03</span>
+        <div>
+          <h4>Output schema</h4>
+          <p>If the model's output doesn't match the declared schema, 
+          the SDK throws. Not silently. Not eventually. Immediately.</p>
+        </div>
+      </li>
+      <li class="concept-point">
+        <span class="concept-point-num">04</span>
+        <div>
+          <h4>Version control</h4>
+          <p>Protocol changes are git commits. Behavior history is git log. 
+          Rollback is git revert. The model's cognition has a changelog.</p>
+        </div>
+      </li>
+    </ul>
+
+    <!-- PROTOCOL FILE EXAMPLE -->
+    <div class="code-window">
+      <div class="code-window-tabs">
+        <span class="tab active">performance_analyst.md</span>
+      </div>
+      <div class="code-body"><span class="s-cmt"># [Protocol] Performance Analyst</span>
+<span class="s-key">Version:</span> <span class="s-val">2.1.0</span>
+<span class="s-key">Model:</span>    <span class="s-val">anthropic/claude-sonnet-4</span>
+<span class="s-key">Author:</span>  <span class="s-val">platform-team</span>
+
+<span class="s-h2">## Context</span>
+You are a static analysis engine operating via
+semantic inference. You do not guess. You measure.
+
+<span class="s-h2">## Slots</span>
+<span class="s-slot">{{code_snippet}}</span>  <span class="s-cmt">string — the code to analyze</span>
+<span class="s-slot">{{strictness}}</span>   <span class="s-cmt">int(1..10) — enforcement level</span>
+<span class="s-slot">{{language}}</span>     <span class="s-cmt">string — programming language</span>
+
+<span class="s-h2">## Constraints</span>
+1. Output <span class="s-kw">MUST</span> be valid JSON matching ## Schema
+2. Never suggest external libraries unless asked
+3. Strictness &lt; 5: report only critical issues
+4. Strictness ≥ 5: report all issues found
+
+<span class="s-h2">## Schema</span>
+<span class="s-str">{</span>
+  <span class="s-key">"score"</span><span class="s-str">:</span>   <span class="s-val">"number(0..100)"</span>,
+  <span class="s-key">"issues"</span><span class="s-str">:</span>  <span class="s-val">"Issue[]"</span>,
+  <span class="s-key">"summary"</span><span class="s-str">:</span> <span class="s-val">"string"</span>
+<span class="s-str">}</span></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- SDK -->
+<section id="sdk">
+  <p class="section-label">// the sdk</p>
+  <h2 class="section-title">Use it like a library.<br />Not a string.</h2>
+  <p class="section-body">
+    The SDK loads your protocol, validates slot injection, calls the model, 
+    and validates the response — before it ever reaches your application.
+  </p>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.5rem;">
+    <div class="code-window">
+      <div class="code-window-tabs">
+        <span class="tab active">Python</span>
+      </div>
+      <div class="code-body"><span class="s-kw">from</span> proto_md <span class="s-kw">import</span> Protocol
+
+<span class="s-cmt"># load like a library</span>
+analyst = <span class="s-fn">Protocol</span>.load(
+  <span class="s-str">"./protocols/performance_analyst.md"</span>
+)
+
+<span class="s-cmt"># inject typed slots</span>
+result = analyst.<span class="s-fn">run</span>(
+  code_snippet=my_code,
+  strictness=<span class="s-num">8</span>,
+  language=<span class="s-str">"python"</span>
+)
+
+<span class="s-cmt"># validated, typed response</span>
+print(result.score)    <span class="s-cmt"># 74</span>
+print(result.issues)   <span class="s-cmt"># Issue[]</span>
+print(result.summary)  <span class="s-cmt"># str</span></div>
+    </div>
+
+    <div class="code-window">
+      <div class="code-window-tabs">
+        <span class="tab active">TypeScript</span>
+      </div>
+      <div class="code-body"><span class="s-kw">import</span> { Protocol } <span class="s-kw">from</span> <span class="s-str">"proto-md"</span>
+
+<span class="s-cmt">// load like a library</span>
+<span class="s-kw">const</span> analyst = <span class="s-kw">await</span> Protocol.<span class="s-fn">load</span>(
+  <span class="s-str">"./protocols/performance_analyst.md"</span>
+)
+
+<span class="s-cmt">// inject typed slots</span>
+<span class="s-kw">const</span> result = <span class="s-kw">await</span> analyst.<span class="s-fn">run</span>({
+  code_snippet: myCode,
+  strictness: <span class="s-num">8</span>,
+  language: <span class="s-str">"typescript"</span>
+})
+
+<span class="s-cmt">// validated, typed response</span>
+result.score    <span class="s-cmt">// number</span>
+result.issues   <span class="s-cmt">// Issue[]</span>
+result.summary  <span class="s-cmt">// string</span></div>
+    </div>
+  </div>
+
+  <!-- LINTER -->
+  <div class="code-window" style="margin-top: 1.5rem;">
+    <div class="code-window-tabs">
+      <span class="tab active">proto lint — the build check</span>
+    </div>
+    <div class="code-body"><span class="s-cmt">$ proto lint ./protocols/</span>
+
+<span class="s-ok">✓</span>  performance_analyst.md    slots: 3 declared, 3 injected
+<span class="s-ok">✓</span>  auth_guard.md             schema: valid JSON shape
+<span class="s-err">✗</span>  db_optimizer.md           <span class="s-err">slot {{table_name}} declared but never injected</span>
+<span class="s-err">✗</span>  summarizer.md             <span class="s-err">no output schema defined — required in v2+</span>
+
+<span class="s-cmt">2 errors · fix before deploy</span></div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- FEATURES -->
+<section>
+  <p class="section-label">// why it matters</p>
+  <h2 class="section-title">Governance for the<br />cognitive layer.</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon">[#]</span>
+      <h4>Type-safe injection</h4>
+      <p>Slots are declared with types. Inject the wrong type or a missing slot and the build breaks. Same discipline as typed code.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">[v]</span>
+      <h4>Semantic versioning</h4>
+      <p>Every protocol has a semver. Breaking changes to slots or schema are major bumps. Your app pins the version.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">[>]</span>
+      <h4>Schema validation</h4>
+      <p>Output is validated against the declared schema before it reaches your application. No more surprise shapes in production.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">[~]</span>
+      <h4>Composable protocols</h4>
+      <p>Protocols can import and extend each other. Build a library of reusable cognitive contracts like Lego.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">[*]</span>
+      <h4>Model-agnostic</h4>
+      <p>Declare the model in the protocol. Switch from Claude to GPT to Gemini by changing one line. Your code stays the same.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">[?]</span>
+      <h4>Human-readable</h4>
+      <p>It's Markdown. Non-engineers can read, review, and understand what the AI is instructed to do. PRs are meaningful.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- GET STARTED -->
+<section id="start">
+  <p class="section-label">// get started</p>
+  <h2 class="section-title">From zero to<br />first protocol.</h2>
+  <p class="section-body">
+    Four steps. No magic. Just structure you should have had from the start.
+  </p>
+
+  <div class="steps">
+    <div class="step">
+      <span class="step-num">step 01</span>
+      <div>
+        <h4>Install the CLI and SDK</h4>
+        <p>Available for Python and Node. The CLI gives you the linter and dev tools. The SDK is what your application imports.</p>
+        <code class="code-inline"><span class="s-cmt">$ </span>pip install proto-md
+<span class="s-cmt">$ </span>npm install proto-md   <span class="s-cmt"># or node</span></code>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">step 02</span>
+      <div>
+        <h4>Write your first protocol</h4>
+        <p>Create a <code style="font-family:var(--mono);font-size:12px;background:var(--bg-2);padding:1px 5px;border-radius:2px;">protocols/</code> directory. Write your prompt as a .md file with the required frontmatter: version, model, slots, constraints, schema. That's it.</p>
+        <code class="code-inline"><span class="s-cmt">$ </span>proto init my_first.md
+<span class="s-ok">✓</span>  protocols/my_first.md created</code>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">step 03</span>
+      <div>
+        <h4>Lint before you commit</h4>
+        <p>Add <code style="font-family:var(--mono);font-size:12px;background:var(--bg-2);padding:1px 5px;border-radius:2px;">proto lint</code> to your CI pipeline. If slots are mismatched or schemas are missing, the build fails. Cognitive contracts are first-class citizens.</p>
+        <code class="code-inline"><span class="s-cmt">$ </span>proto lint ./protocols/
+<span class="s-ok">✓</span>  All protocols valid</code>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-num">step 04</span>
+      <div>
+        <h4>Load in your application</h4>
+        <p>Replace your hardcoded f-strings with <code style="font-family:var(--mono);font-size:12px;background:var(--bg-2);padding:1px 5px;border-radius:2px;">Protocol.load()</code>. Inject slots. Get validated, typed results. Your application logic stays clean. Your cognition layer has governance.</p>
+        <code class="code-inline"><span class="s-kw">from</span> proto_md <span class="s-kw">import</span> Protocol
+p = Protocol.load(<span class="s-str">"./protocols/my_first.md"</span>)
+result = p.run(slot_a=..., slot_b=...)</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>Stop writing prompts.<br />Start writing protocols.</h2>
+  <p>
+    Your model's behavior deserves the same discipline as your code. 
+    Version it. Lint it. Own it.
+  </p>
+  <div class="hero-actions" style="justify-content:center;">
+    <a href="https://github.com" class="btn-primary">View on GitHub →</a>
+    <a href="#concept" class="btn-secondary">Read the docs</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<hr class="divider" />
+<footer>
+  <div class="logo"><span>~/</span>proto.md</div>
+  <p>open source · MIT license · built for the cognitive layer</p>
+</footer>
+
+</body>
+</html>
