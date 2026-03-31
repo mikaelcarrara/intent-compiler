@@ -875,12 +875,12 @@
 
     /* ── FOOTER ── */
     footer {
-      padding: 2rem;
+      padding: 1rem 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin: 0 auto;
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.01);
     }
 
     footer .logo {
@@ -1290,13 +1290,13 @@
           The prompt is buried inside Python functions, concatenated with f-strings,
           mixed with business logic.
         </p>
-        <div class="problem-code">
-          <span class="bad">def</span> analyze(code):
-          prompt = <span class="str">f"You are an expert..."</span>
-          prompt += <span class="str">f"Analyze: {code}"</span>
-          <span class="comment"># 400 lines later...</span>
-          return llm.call(prompt)
-        </div>
+      <div class="problem-code">
+<span class="bad">def</span> analyze(code):
+  prompt = <span class="str">f"You are an expert..."</span>
+  prompt += <span class="str">f"Analyze: {code}"</span>
+  <span class="comment"># 400 lines later...</span>
+  return llm.call(prompt)
+      </div>
       </div>
 
       <div class="problem-card" data-role="// the generator">
@@ -1305,16 +1305,16 @@
           The prompt is thrown at the AI ad-hoc, with no validation,
           no output schema, no versioning.
         </p>
-        <div class="problem-code">
-          <span class="comment"># slack message to the team</span>
-          <span class="str">"hey the AI is acting weird"</span>
+      <div class="problem-code">
+<span class="comment"># slack message to the team</span>
+<span class="str">"hey the AI is acting weird"</span>
 
-          <span class="comment"># the 'protocol'</span>
-          <span class="str">"gpt make me an analysis"</span>
-          <span class="str">"return something useful"</span>
+<span class="comment"># the 'protocol'</span>
+<span class="str">"gpt make me an analysis"</span>
+<span class="str">"return something useful"</span>
 
-          <span class="comment"># production. real.</span>
-        </div>
+<span class="comment"># production. real.</span>
+      </div>
       </div>
     </div>
   </section>
@@ -1374,15 +1374,15 @@
       <div class="workflow-step" id="ws-step1">
         <div class="workflow-icon">📋</div>
         <div class="workflow-label">1. Protocol</div>
-        <div class="workflow-code">
-          <span class="wl-comment"># protocol.md</span>
-          <span class="wl-key">version:</span> <span class="wl-str">1.0.0</span>
-          <span class="wl-key">model:</span> <span class="wl-str">claude-3</span>
-          <span class="wl-key">schema:</span>
-          <span class="wl-tab">username: string</span>
-          <span class="wl-tab">email: email</span>
-          <span class="wl-tab">age: int 18-120</span>
-        </div>
+      <div class="workflow-code">
+<span class="wl-comment"># protocol.md</span>
+<span class="wl-key">version:</span> <span class="wl-str">1.0.0</span>
+<span class="wl-key">model:</span> <span class="wl-str">claude-3</span>
+<span class="wl-key">schema:</span>
+<span class="wl-tab">username: string</span>
+<span class="wl-tab">email: email</span>
+<span class="wl-tab">age: int 18-120</span>
+      </div>
       </div>
 
       <div class="workflow-arrow">→</div>
@@ -1399,64 +1399,60 @@
         <div class="workflow-panels">
           <div class="wpanel active" id="mock-panel">
             <div class="wpanel-label">// generate test data</div>
-            <div class="wpanel-code">
-              <span class="wl-cmd">$ proto generate p.md --mock</span>
-              <span class="wl-output">{</span>
-              <span class="wl-tab"><span class="wl-key">"username"</span>: <span class="wl-str">"john_42"</span>,</span>
-              <span class="wl-tab"><span class="wl-key">"email"</span>: <span
-                  class="wl-str">"john@test.io"</span>,</span>
-              <span class="wl-tab"><span class="wl-key">"age"</span>: <span class="wl-num">28</span></span>
-              <span class="wl-output">}</span>
-            </div>
+          <div class="wpanel-code">
+<span class="wl-cmd">$ proto generate p.md --mock</span>
+<span class="wl-output">{</span>
+<span class="wl-tab"><span class="wl-key">"username"</span>: <span class="wl-str">"john_42"</span>,</span>
+<span class="wl-tab"><span class="wl-key">"email"</span>: <span class="wl-str">"john@test.io"</span>,</span>
+<span class="wl-tab"><span class="wl-key">"age"</span>: <span class="wl-num">28</span></span>
+<span class="wl-output">}</span>
+          </div>
           </div>
 
           <div class="wpanel" id="ui-panel">
             <div class="wpanel-label">// generate html form</div>
-            <div class="wpanel-code">
-              <span class="wl-cmd">$ proto generate p.md --ui</span>
-              <span class="wl-output"><span class="wl-tag">&lt;form&gt;</span>
-                <span class="wl-tag">&lt;input</span> <span class="wl-attr">name="username"</span><span
-                  class="wl-tag">/&gt;</span>
-                <span class="wl-tag">&lt;input</span> <span class="wl-attr">name="email"</span> <span
-                  class="wl-attr">type="email"</span><span class="wl-tag">/&gt;</span>
-                <span class="wl-tag">&lt;input</span> <span class="wl-attr">name="age"</span> <span
-                  class="wl-attr">type="number"</span><span class="wl-tag">/&gt;</span>
-                <span class="wl-tag">&lt;/form&gt;</span>
-            </div>
+          <div class="wpanel-code">
+<span class="wl-cmd">$ proto generate p.md --ui</span>
+<span class="wl-output"><span class="wl-tag">&lt;form&gt;</span>
+  <span class="wl-tag">&lt;input</span> <span class="wl-attr">name="username"</span><span class="wl-tag">/&gt;</span>
+  <span class="wl-tag">&lt;input</span> <span class="wl-attr">name="email"</span> <span class="wl-attr">type="email"</span><span class="wl-tag">/&gt;</span>
+  <span class="wl-tag">&lt;input</span> <span class="wl-attr">name="age"</span> <span class="wl-attr">type="number"</span><span class="wl-tag">/&gt;</span>
+<span class="wl-tag">&lt;/form&gt;</span>
+          </div>
           </div>
 
           <div class="wpanel" id="validate-panel">
             <div class="wpanel-label">// validate llm output</div>
-            <div class="wpanel-code">
-              <span class="wl-cmd">$ proto lint output.json</span>
-              <span class="wl-ok">✓ valid</span>
-              <span class="wl-tab">schema: matches</span>
-              <span class="wl-tab">types: correct</span>
-              <span class="wl-tab">constraints: ok</span>
-            </div>
+          <div class="wpanel-code">
+<span class="wl-cmd">$ proto lint output.json</span>
+<span class="wl-ok">✓ valid</span>
+<span class="wl-tab">schema: matches</span>
+<span class="wl-tab">types: correct</span>
+<span class="wl-tab">constraints: ok</span>
+          </div>
           </div>
 
           <div class="wpanel" id="version-panel">
             <div class="wpanel-label">// semantic versioning</div>
-            <div class="wpanel-code">
-              <span class="wl-cmt"># breaking change? bump major</span>
-              <span class="wl-key">version:</span> <span class="wl-num">2.0.0</span>
-              <span class="wl-comment"># old: username string</span>
-              <span class="wl-comment"># new: user_id string + username</span>
+          <div class="wpanel-code">
+<span class="wl-cmt"># breaking change? bump major</span>
+<span class="wl-key">version:</span> <span class="wl-num">2.0.0</span>
+<span class="wl-comment"># old: username string</span>
+<span class="wl-comment"># new: user_id string + username</span>
 
-              <span class="wl-cmt"># protocol.md --1.0.0</span>
-              <span class="wl-cmt"># protocol.md --2.0.0</span>
-            </div>
+<span class="wl-cmt"># protocol.md --1.0.0</span>
+<span class="wl-cmt"># protocol.md --2.0.0</span>
+          </div>
           </div>
 
           <div class="wpanel" id="ci-panel">
             <div class="wpanel-label">// gate every pr</div>
-            <div class="wpanel-code">
-              <span class="wl-cmd">$ proto lint protocols/</span>
-              <span class="wl-ok">✓ 12/12 valid</span>
-              <span class="wl-tab">exit 0 → merge allowed</span>
-              <span class="wl-output">exit 1 → pr blocked</span>
-            </div>
+          <div class="wpanel-code">
+<span class="wl-cmd">$ proto lint protocols/</span>
+<span class="wl-ok">✓ 12/12 valid</span>
+<span class="wl-tab">exit 0 → merge allowed</span>
+<span class="wl-output">exit 1 → pr blocked</span>
+          </div>
           </div>
         </div>
       </div>
@@ -1548,24 +1544,22 @@
         <div class="code-window-tabs">
           <span class="tab active">sentiment.md</span>
         </div>
-        <div class="code-body"><span class="s-key">Version:</span> <span class="s-val">1.0.0</span>
-          <span class="s-key">Model:</span> <span class="s-val">anthropic/claude-sonnet-4</span>
+      <div class="code-body"><span class="s-key">Version:</span> <span class="s-val">1.0.0</span>
+<span class="s-key">Model:</span> <span class="s-val">anthropic/claude-sonnet-4</span>
 
-          <span class="s-h2">## Context</span>
-          You are a sentiment analyst.
+<span class="s-h2">## Context</span>
+You are a sentiment analyst.
 
-          <span class="s-h2">## Slots</span>
-          <span class="s-slot">{{text}}</span> <span class="s-cmt">string — text to analyze</span>
-          <span class="s-slot">{{lang}}</span> <span class="s-cmt">string — en | pt | es</span>
+<span class="s-h2">## Slots</span>
+<span class="s-slot">{{text}}</span>  <span class="s-cmt">string — text to analyze</span>
+<span class="s-slot">{{lang}}</span>   <span class="s-cmt">string — en | pt | es</span>
 
-          <span class="s-h2">## Schema</span>
-          <span class="s-str">{</span>
-          <span class="s-key">"sentiment"</span>: <span class="s-val">"positive | neutral | negative"</span><span
-            class="s-str">,</span>
-          <span class="s-key">"confidence"</span>: <span class="s-val">"0.0..1.0"</span><span class="s-str">,</span>
-          <span class="s-key">"reasoning"</span>: <span class="s-val">"string"</span>
-          <span class="s-str">}</span>
-        </div>
+<span class="s-h2">## Schema</span>
+<span class="s-str">{</span>
+  <span class="s-key">"sentiment"</span>:   <span class="s-val">"positive | neutral | negative"</span><span class="s-str">,</span>
+  <span class="s-key">"confidence"</span>:  <span class="s-val">"0.0..1.0"</span><span class="s-str">,</span>
+  <span class="s-key">"reasoning"</span>:   <span class="s-val">"string"</span>
+<span class="s-str">}</span></div>
       </div>
     </div>
   </section>
@@ -1586,27 +1580,23 @@
         <div class="code-window-tabs">
           <span class="tab active">CLI</span>
         </div>
-        <div class="code-body"><span class="s-cmt">$</span> <span class="cmd-highlight">intent lint protocols --format
-            compact</span>
+      <div class="code-body"><span class="s-cmt">$</span> <span class="cmd-highlight">intent lint protocols --format compact</span>
 
-          <span class="s-err">x</span> invalid_protocol.md <span class="s-err">2e</span> <span class="s-warn">0w</span>
-          <span class="s-ok">v</span> valid_protocol.md <span class="s-ok">0e</span> <span class="s-warn">0w</span>
-          <span class="s-cmt">1/2 valid . exit 1 blocks CI</span>
-        </div>
+<span class="s-err">x</span>  invalid_protocol.md <span class="s-err">2e</span> <span class="s-warn">0w</span>
+<span class="s-ok">v</span>  valid_protocol.md  <span class="s-ok">0e</span> <span class="s-warn">0w</span>
+<span class="s-cmt">1/2 valid  .  exit 1 blocks CI</span></div>
       </div>
 
       <div class="code-window">
         <div class="code-window-tabs">
           <span class="tab active">intent resolve</span>
         </div>
-        <div class="code-body"><span class="s-cmt">$</span> <span class="cmd-highlight">intent resolve
-            protocol.md</span>
-          <span class="s-str">{</span>
-          <span class="s-key">"sentiment"</span>: <span class="s-val">"positive"</span><span class="s-str">,</span>
-          <span class="s-key">"confidence"</span>: <span class="s-val">0.92</span><span class="s-str">,</span>
-          <span class="s-key">"reasoning"</span>: <span class="s-val">"string"</span>
-          <span class="s-str">}</span>
-        </div>
+      <div class="code-body"><span class="s-cmt">$</span> <span class="cmd-highlight">intent resolve protocol.md</span>
+<span class="s-str">{</span>
+  <span class="s-key">"sentiment"</span>:   <span class="s-val">"positive"</span><span class="s-str">,</span>
+  <span class="s-key">"confidence"</span>:  <span class="s-val">0.92</span><span class="s-str">,</span>
+  <span class="s-key">"reasoning"</span>:   <span class="s-val">"string"</span>
+<span class="s-str">}</span></div>
       </div>
     </div>
 
@@ -1615,21 +1605,17 @@
       <div class="code-window-tabs">
         <span class="tab active">intent generate --mock</span>
       </div>
-      <div class="code-body"><span class="s-cmt"># Generate mock API data from JSON Schema</span>
-        <span class="s-cmt">$</span> <span class="cmd-highlight">intent generate protocol.md --mock --count 3</span>
-        <span class="s-str">{</span>
-        <span class="s-key">"mocks"</span>: <span class="s-str">[</span>
-        <span class="s-str">{</span> <span class="s-key">"summary"</span>: <span class="s-val">"sample"</span> <span
-          class="s-str">}</span><span class="s-str">,</span>
-        <span class="s-str">{</span> <span class="s-key">"summary"</span>: <span class="s-val">"sa"</span> <span
-          class="s-str">}</span><span class="s-str">,</span>
-        <span class="s-str">{</span> <span class="s-key">"summary"</span>: <span class="s-val">"sample"</span> <span
-          class="s-str">}</span>
-        <span class="s-str">]</span>
-        <span class="s-str">}</span>
-        <span class="s-cmt"># Supports: string, number, integer, boolean, array, object</span>
-        <span class="s-cmt"># Formats: date-time, email, uri, uuid, ipv4, base64</span>
-      </div>
+    <div class="code-body"><span class="s-cmt"># Generate mock API data from JSON Schema</span>
+<span class="s-cmt">$</span> <span class="cmd-highlight">intent generate protocol.md --mock --count 3</span>
+<span class="s-str">{</span>
+  <span class="s-key">"mocks"</span>: <span class="s-str">[</span>
+    <span class="s-str">{</span> <span class="s-key">"summary"</span>: <span class="s-val">"sample"</span> <span class="s-str">}</span><span class="s-str">,</span>
+    <span class="s-str">{</span> <span class="s-key">"summary"</span>: <span class="s-val">"sa"</span> <span class="s-str">}</span><span class="s-str">,</span>
+    <span class="s-str">{</span> <span class="s-key">"summary"</span>: <span class="s-val">"sample"</span> <span class="s-str">}</span>
+  <span class="s-str">]</span>
+<span class="s-str">}</span>
+<span class="s-cmt"># Supports: string, number, integer, boolean, array, object</span>
+<span class="s-cmt"># Formats: date-time, email, uri, uuid, ipv4, base64</span></div>
     </div>
 
     <!-- LINTER -->
@@ -1637,16 +1623,15 @@
       <div class="code-window-tabs">
         <span class="tab active">intent-compiler in CI</span>
       </div>
-      <div class="code-body"><span class="s-cmt"># .github/workflows/quality.yml</span>
-        <span class="s-key">name:</span> <span class="s-val">Quality Check</span>
-        <span class="s-key">on:</span> <span class="s-str">[push, pull_request]</span>
+    <div class="code-body"><span class="s-cmt"># .github/workflows/quality.yml</span>
+<span class="s-key">name:</span> <span class="s-val">Quality Check</span>
+<span class="s-key">on:</span> <span class="s-str">[push, pull_request]</span>
 
-        <span class="s-key">jobs:</span>
-        <span class="s-key">lint:</span>
-        <span class="s-key">steps:</span>
-        - <span class="s-kw">run:</span> <span class="cmd-highlight">pip install pyyaml jsonschema</span>
-        - <span class="s-kw">run:</span> <span class="cmd-highlight">intent lint protocols/ --strict</span>
-      </div>
+<span class="s-key">jobs:</span>
+  <span class="s-key">lint:</span>
+    <span class="s-key">steps:</span>
+      - <span class="s-kw">run:</span> <span class="cmd-highlight">pip install pyyaml jsonschema</span>
+      - <span class="s-kw">run:</span> <span class="cmd-highlight">intent lint protocols/ --strict</span></div>
     </div>
   </section>
 
