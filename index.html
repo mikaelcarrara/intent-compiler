@@ -746,19 +746,19 @@ textarea.demo-input::selection { background: rgba(232,160,32,0.2); }
 <!-- HERO -->
 <div class="hero">
   <span class="hero-tag">Protocol-Driven Development</span>
-  <h1 class="hero-title">The prompt is<br />the contract.</h1>
+  <h1 class="hero-title">Your prompt<br />has a schema.</h1>
   <p class="hero-subtitle">
-    Stop hardcoding prompts inside your application logic.<br/>
-    Stop generating them blindly without governance.<br/>
-    Write them as typed, versioned, validated protocols.
+    intent-compiler turns Markdown protocols into deterministic artifacts —
+    typed, validated, versioned. No more prompt drift.<br/>
+    Write protocol. Compile to behavior.
   </p>
   <div class="hero-actions">
     <a href="#start" class="btn-primary">Get started →</a>
-    <a href="#concept" class="btn-secondary">What is PDD?</a>
+    <a href="#concept" class="btn-secondary">See how it works</a>
   </div>
   <div class="hero-install">
     <span class="prompt">$</span>
-    <span class="cmd">python cli.py protocols</span>
+    <span class="cmd">python cli.py lint protocols</span>
   </div>
 </div>
 
@@ -854,16 +854,16 @@ textarea.demo-input::selection { background: rgba(232,160,32,0.2); }
 <!-- CONCEPT -->
 <section id="concept">
   <p class="section-label">// the solution</p>
-  <h2 class="section-title">Prompts are infrastructure.</h2>
+  <h2 class="section-title">Prompts are infrastructure.<br />Treat them like code.</h2>
   <p class="section-body">
-    Protocol-Driven Development (PDD) treats every prompt as a typed, 
-    validated contract. Written in Markdown. Versioned in Git. 
-    Injected by an SDK that guarantees output schemas.
+    intent-compiler compiles Markdown protocols into typed, validated artifacts.
+    Every prompt becomes a deterministic contract — with a schema, slot types,
+    and CI-enforced rules. Version it in Git. Lint it before merge. Ship with confidence.
   </p>
 
   <div class="philosophy-block">
     <blockquote>
-      "If your Dockerfile defines what runs, your protocol.md defines how 
+      "If your Dockerfile defines what runs, your protocol.md defines how
       your model thinks. One governs the container. The other governs the cognition."
     </blockquote>
     <cite>intent-compiler manifesto</cite>
@@ -935,10 +935,10 @@ You are a sentiment analyst.
 <!-- SDK -->
 <section id="sdk">
   <p class="section-label">// mvp status</p>
-  <h2 class="section-title">Lint-first workflow.<br />CI-ready contracts.</h2>
+  <h2 class="section-title">Deterministic by design.<br />CI-native from day one.</h2>
   <p class="section-body">
-    The current MVP ships parser + validator + CLI + tests + quality workflow.
-    Run protocol checks locally and enforce them on pull requests before deploy.
+    intent-compiler ships parser + validator + CLI + tests. Run checks locally.
+    Gate every PR. Know exactly what your model will do — before it runs.
   </p>
 
   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.5rem;">
@@ -946,44 +946,40 @@ You are a sentiment analyst.
       <div class="code-window-tabs">
         <span class="tab active">CLI</span>
       </div>
-      <div class="code-body"><span class="s-cmt">$ python cli.py lint protocols</span>
+      <div class="code-body"><span class="s-cmt">$ python cli.py lint protocols --format compact</span>
 
-<span class="s-err">x</span>  protocols/invalid_protocol.md  <span class="s-err">2 errors</span>
-  <span class="s-err">> undeclared slot: {undeclared}</span>
-  <span class="s-err">> missing required field: schema</span>
-<span class="s-ok">v</span>  protocols/valid_protocol.md  <span class="s-ok">0 errors</span>
-
+<span class="s-err">x</span>  invalid_protocol.md <span class="s-err">2e</span> <span class="s-warn">0w</span>
+<span class="s-ok">v</span>  valid_protocol.md  <span class="s-ok">0e</span> <span class="s-warn">0w</span>
 <span class="s-cmt">1/2 valid  .  exit 1 blocks CI</span></div>
     </div>
 
     <div class="code-window">
       <div class="code-window-tabs">
-        <span class="tab active">Quality CI</span>
+        <span class="tab active">intent resolve</span>
       </div>
-      <div class="code-body"><span class="s-cmt"># .github/workflows/quality.yml</span>
-<span class="s-key">name:</span> Quality Check
-<span class="s-key">on:</span> [push, pull_request]
-
-<span class="s-key">jobs:</span>
-  <span class="s-key">quality:</span>
-    <span class="s-key">steps:</span>
-      - <span class="s-kw">run:</span> pip install pyyaml jsonschema
-      - <span class="s-kw">run:</span> python -m py_compile parser.py validator.py cli.py
-      - <span class="s-kw">run:</span> python -m unittest -v
-      - <span class="s-kw">run:</span> python cli.py lint protocols/ --strict</div>
+      <div class="code-body"><span class="s-cmt">$ python cli.py resolve protocol.md</span>
+<span class="s-str">{</span>
+  <span class="s-key">"sentiment"</span>:   <span class="s-val">"positive"</span><span class="s-str">,</span>
+  <span class="s-key">"confidence"</span>:  <span class="s-val">0.92</span><span class="s-str">,</span>
+  <span class="s-key">"reasoning"</span>:   <span class="s-val">"string"</span>
+<span class="s-str">}</span></div>
     </div>
   </div>
 
   <!-- LINTER -->
   <div class="code-window" style="margin-top: 1.5rem;">
     <div class="code-window-tabs">
-      <span class="tab active">intent MVP — the build check</span>
+      <span class="tab active">intent-compiler in CI</span>
     </div>
-    <div class="code-body"><span class="s-cmt">$ python cli.py lint protocols --format compact</span>
+    <div class="code-body"><span class="s-cmt"># .github/workflows/quality.yml</span>
+<span class="s-key">name:</span> Quality Check
+<span class="s-key">on:</span> [push, pull_request]
 
-<span class="s-err">x</span>  invalid_protocol.md <span class="s-err">2e</span> <span class="s-warn">0w</span>
-<span class="s-ok">v</span>  valid_protocol.md  <span class="s-ok">0e</span> <span class="s-warn">0w</span>
-<span class="s-cmt">1/2 valid  .  exit 1 → CI blocks merge</span></div>
+<span class="s-key">jobs:</span>
+  <span class="s-key">lint:</span>
+    <span class="s-key">steps:</span>
+      - <span class="s-kw">run:</span> pip install pyyaml jsonschema
+      - <span class="s-kw">run:</span> python cli.py lint protocols/ --strict</div>
   </div>
 </section>
 
@@ -1082,8 +1078,8 @@ You are a sentiment analyst.
 <div class="cta-section">
   <h2>Stop writing prompts.<br />Start writing protocols.</h2>
   <p>
-    Your model's behavior deserves the same discipline as your code. 
-    Version it. Lint it. Own it.
+    Your model's behavior deserves the same discipline as your code.
+    Version it. Lint it. Compile it.
   </p>
   <div class="hero-actions" style="justify-content:center;">
     <a href="https://github.com/mikaelcarrara/intent-compiler" class="btn-primary">View on GitHub →</a>
