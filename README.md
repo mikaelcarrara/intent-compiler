@@ -138,29 +138,29 @@ intent-compiler/
 
 ## Roadmap
 
-Completed:
-- [x] `proto lint` — validate protocols (table/compact/json)
-- [x] `proto resolve` — emit structured artifact
-- [x] `proto generate --mock` — generate API mocks from schema
-- [x] `proto generate --ui` — generate HTML forms from schema
-- [x] Type-safe slot parsing
-- [x] JSON Schema Draft 7 validation
-- [x] CI exit codes
-- [x] `.intent.yaml` configuration
-- [x] Semantic versioning support
+### Completed (Phase 1: Engine & Enterprise Architecture)
+- [x] **Core Parsing:** AST-based Markdown parsing (`markdown-it-py`) with Type-Safe Slots.
+- [x] **Validation:** JSON Schema Draft 7 integration natively without manual overhead.
+- [x] **CLI Evolution:** Intuitive `Click` module commands (`intent lint`, `intent resolve`, `intent generate`).
+- [x] **Outputs:** Emits structured artifacts (JSON, YAML, TypeScript, semantic prompts).
+- [x] **Generators:** Scalable Mock API payloads & Jinja2-based HTML form templating.
+- [x] **Developer Experience:** Multi-format CLI reporting (table, compact, JSON) with strict CI exit codes.
+- [x] **Configuration:** `.intent.yaml` standard config with warnings/errors thresholds and semver spec validations.
+- [x] **Testing:** Robust test suite coverage via `Pytest` and dynamic fixtures.
 
-Planned:
-- [ ] `proto init` — scaffold new protocol
-- [ ] TypeScript SDK
-- [ ] Python SDK (PyPI)
-- [ ] VS Code Extension
-- [ ] Protocol import/extension
+### Planned (Phase 2: Ecosystem & Developer Tooling)
+- [ ] **DX & Hardening:** Line-specific context in error messages, >90% test coverage, and complete SAST/typecheck CI pipelines.
+- [ ] **Scaffolding:** `intent init` command to quickly bootstrap protocol templates.
+- [ ] **Ecosystem:** Finalize PyPI publishing for the Python SDK and build a native TypeScript SDK (`npm`).
+- [ ] **Editor Tooling:** Official VS Code Extension for on-the-fly markdown highlighting, autocomplete, and slot hovering.
+- [ ] **Advanced Features:** Protocol composition (`import`/`extend` specs) and integration tests with live LLM Providers.
+- [ ] **Strategic Positioning:** Re-evaluate messaging to heavily emphasize "Intent Compilation" strictly over traditional "Linting".
 
 ## Documentation
 
 - `SPEC_FRONTMATTER.md` — Frontmatter specification
-- `SPEC_PROTO_LINT.md` — Linting behavior
-- `PLANO_EXECUCAO.md` — Full roadmap (Portuguese)
+- `SPEC_PROTO_LINT.md` — Linting rules layout and behavior
+- `index.html` — Live interactive visualizer and Demo landing page
 
 ## License
 
