@@ -6,7 +6,39 @@ Valida outputs do modelo contra schemas JSON Schema definidos nos protocolos
 import json
 from typing import Dict, Any, List, Optional
 from jsonschema import Draft7Validator
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+@dataclass
+class LintRule:
+    id: str
+    severity: str  # "error" | "warning"
+    message: str
+
+@dataclass
+class LintResult:
+    rule_id: str
+    severity: str
+    message: str
+    line: Optional[int] = None
+    col: Optional[int] = None
+
+@dataclass
+class LintConfig:
+    rules: List[LintRule] = field(default_factory=list)
+    fail_on: str = "error"  # "error" | "warning" | "off"
+
+DEFAULT_LINT_CONFIG = LintConfig(
+    rules=[
+        LintRule("PM001", "error", "Frontmatter obrigatório faltando"),
+        LintRule("PM002", "error", "Campo obrigatório faltando: {field}"),
+        LintRule("PM003", "error", "Slots usados mas não declarados: {slots}"),
+        LintRule("PM004", "error", "Schema inválido: {reason}"),
+        LintRule("PM005", "warning", "Slots declarados mas não usados: {slots}"),
+        LintRule("PM006", "warning", "Version não segue semver"),
+        LintRule("PM007", "warning", "Model não especificado"),
+    ],
+    fail_on="error",
+)
 
 @dataclass
 class ValidationResult:

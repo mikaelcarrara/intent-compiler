@@ -1,7 +1,8 @@
-# Especificação do proto-lint
+# Especificação do intent-lint
 
 ## Objetivo
-O `proto-lint` é uma ferramenta de linting que valida arquivos de protocolo (.md) e garante que eles estejam em conformidade com as especificações do Protocol-Driven Development. Ele deve ser executado no CI/CD e **quebrar o build** quando encontra erros críticos.
+
+O `intent-lint` é uma ferramenta de linting que valida arquivos de protocolo (.md) e garante que eles estejam em conformidade com as especificações do Protocol-Driven Development. Ele deve ser executado no CI/CD e **quebrar o build** quando encontra erros críticos.
 
 ## Tipos de Erros (Quebram o Build)
 
@@ -80,7 +81,7 @@ O `proto-lint` é uma ferramenta de linting que valida arquivos de protocolo (.m
 
 ### Comando Básico
 ```bash
-proto-lint [arquivos/diretórios]
+intent-lint [arquivos/diretórios]
 ```
 
 ### Opções
@@ -90,31 +91,30 @@ proto-lint [arquivos/diretórios]
 --format table        # Output em formato tabela (padrão)
 --quiet               # Silencioso: apenas erros
 --verbose             # Verbose: mostra detalhes de validação
---config .protolint   # Arquivo de configuração
+--config .intent.yaml   # Arquivo de configuração
 ```
 
 ### Exemplos de Uso
 ```bash
 # Lint único arquivo
-proto-lint performance_analyst.md
+intent-lint performance_analyst.md
 
 # Lint diretório recursivo
-proto-lint protocols/
+intent-lint protocols/
 
 # Modo strict (warnings = errors)
-proto-lint --strict protocols/
+intent-lint --strict protocols/
 
 # Output JSON para CI
-proto-lint --format json protocols/ > lint-results.json
+intent-lint --format json protocols/ > lint-results.json
 
 # Config customizada
-proto-lint --config custom.protolint protocols/
+intent-lint --config custom.intent protocols/
 ```
 
-## Arquivo de Configuração (.protolint)
+## Arquivo de Configuração (.intent.yaml)
 
-```yaml
-# .protolint
+# .intent.yaml
 rules:
   required-fields:
     - version
@@ -158,10 +158,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install proto-lint
-        run: pip install proto-lint
+      - name: Install intent-lint
+        run: pip install intent-lint
       - name: Run lint
-        run: proto-lint --strict --format json protocols/
+        run: intent-lint --strict --format json protocols/
       - name: Upload results
         if: failure()
         uses: actions/upload-artifact@v2
@@ -175,8 +175,8 @@ jobs:
 protocol-lint:
   stage: validate
   script:
-    - pip install proto-lint
-    - proto-lint --strict protocols/
+    - pip install intent-lint
+    - intent-lint --strict protocols/
   allow_failure: false  # Quebra o build em caso de erro
 ```
 
@@ -246,7 +246,7 @@ colorama>=0.4.0
 
 ### Estrutura do Código
 ```
-proto_lint/
+intent_lint/
 ├── __init__.py
 ├── cli.py              # Interface de linha de comando
 ├── validator.py        # Lógica de validação

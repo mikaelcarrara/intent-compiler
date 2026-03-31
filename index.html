@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>proto.md — Protocol-Driven Development</title>
+<title>intent-compiler — Protocol contracts for AI workflows</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Satoshi:wght@300;400;500;700&display=swap" rel="stylesheet" />
@@ -395,13 +395,14 @@
   .code-body {
     padding: 1.5rem;
     font-family: var(--mono);
-    font-size: 12.5px;
-    line-height: 1.8;
+    font-size: 13.5px;
+    line-height: 1.65;
     overflow-x: auto;
     white-space: pre;
     color: var(--text-muted);
     max-width: 100%;
     word-wrap: break-word;
+    letter-spacing: 0.01em;
   }
 
   /* syntax colors */
@@ -412,10 +413,11 @@
   .s-h2  { color: var(--text); }
   .s-slot { color: #e08080; }
   .s-str { color: #8ab4a0; }
-  .s-kw  { color: var(--gray-medium); }
-  .s-fn  { color: var(--gray-light); }
+  .s-kw { color: var(--gray-medium); }
+  .s-fn { color: var(--gray-light); }
   .s-num { color: #c0a070; }
-  .s-ok  { color: var(--green-bright); }
+  .s-ok { color: var(--green-bright); }
+  .s-warn { color: var(--amber-dim); }
   .s-err { color: #c07070; }
 
   /* ── FEATURES ── */
@@ -527,14 +529,15 @@
   .code-inline {
     background: var(--bg-2);
     border: 0.5px solid var(--border);
-    border-radius: 4px;
-    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    padding: 0.6rem 1rem;
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: 13px;
     color: var(--text-muted);
     display: block;
     white-space: pre;
     overflow-x: auto;
+    line-height: 1.6;
   }
 
   /* ── CTA ── */
@@ -597,25 +600,146 @@
     color: var(--text);
   }
 
-  @media (max-width: 768px) {
-    .problem-grid, .features-grid { grid-template-columns: 1fr; }
-    .concept-layout { grid-template-columns: 1fr; }
-    .step { grid-template-columns: 48px 1fr; }
-    nav .nav-links { display: none; }
-  }
+  /* ── DEMO ── */
+.demo-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+.demo-editor, .demo-output {
+  background: var(--bg-card);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.demo-editor-header, .demo-output-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 0.5px solid var(--border);
+  background: var(--bg-2);
+  flex-shrink: 0;
+}
+.demo-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.demo-dot-r { background: #c04040; }
+.demo-dot-y { background: #c0a040; }
+.demo-dot-g { background: #40a060; }
+.demo-label { font-family: var(--mono); font-size: 11px; color: var(--text-dim); margin-left: 0.5rem; }
+.demo-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 2px;
+  margin-left: auto;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.demo-badge-md { background: rgba(232,160,32,0.15); color: var(--amber); border: 0.5px solid rgba(232,160,32,0.3); }
+.demo-badge-json { background: rgba(106,184,122,0.15); color: var(--green-bright); border: 0.5px solid rgba(106,184,122,0.3); }
+textarea.demo-input {
+  flex: 1;
+  min-height: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  padding: 1.25rem;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: var(--text-muted);
+  caret-color: var(--amber);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+  overflow-x: hidden;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+textarea.demo-input::-webkit-scrollbar { width: 4px; }
+textarea.demo-input::-webkit-scrollbar-track { background: transparent; }
+textarea.demo-input::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+textarea.demo-input::-webkit-scrollbar-thumb:hover { background: var(--gray-dark); }
+textarea.demo-input::selection { background: rgba(232,160,32,0.2); }
+.json-body {
+  flex: 1;
+  min-height: 0;
+  padding: 1.25rem;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.8;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+  overflow-x: hidden;
+  word-wrap: break-word;
+}
+.json-body::-webkit-scrollbar { width: 4px; }
+.json-body::-webkit-scrollbar-track { background: transparent; }
+.json-body::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+.json-body::-webkit-scrollbar-thumb:hover { background: var(--gray-dark); }
+
+.json-artifact { border-left: 2px solid var(--amber); padding-left: 1rem; }
+.json-section { margin-bottom: 1.25rem; }
+.json-section:last-child { margin-bottom: 0; }
+.json-section-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber-dim); margin-bottom: 0.4rem; display: block; }
+.json-inner { padding-left: 0.75rem; }
+.json-kv { display: flex; gap: 0.35rem; margin-bottom: 0.2rem; align-items: baseline; }
+.json-indent { color: var(--text-dim); user-select: none; width: 1rem; flex-shrink: 0; }
+.json-key { color: var(--gray-light); }
+.json-str { color: #8ab4a0; }
+.json-num { color: #c0a070; }
+.json-cmt { color: var(--text-dim); font-style: italic; display: block; margin-bottom: 0.5rem; }
+.json-ok { color: var(--green-bright); }
+.json-err { color: #c07070; }
+.json-badge { display: inline-block; padding: 1px 6px; border-radius: 2px; font-size: 10px; margin-left: 0.5rem; vertical-align: middle; }
+.json-badge-ok { background: rgba(106,184,122,0.15); color: var(--green-bright); border: 0.5px solid rgba(106,184,122,0.3); }
+.json-badge-err { background: rgba(192,112,112,0.15); color: #c07070; border: 0.5px solid rgba(192,112,112,0.3); }
+.json-valid-bar { display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem; padding-top: 0.75rem; border-top: 0.5px solid var(--border); }
+.json-valid-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.json-valid-dot-ok { background: var(--green-bright); }
+.json-valid-dot-err { background: #c07070; }
+.json-valid-text { font-family: var(--mono); font-size: 11px; }
+.demo-resolve-btn { display: block; width: 100%; margin-top: 1.5rem; padding: 12px; background: var(--amber); color: #0a0906; font-family: var(--mono); font-size: 13px; font-weight: 600; border: none; border-radius: var(--radius-md); cursor: pointer; letter-spacing: 0.02em; transition: opacity 0.2s; }
+.demo-resolve-btn:hover { opacity: 0.85; }
+.anim-glow { animation: glow 1.5s ease-in-out infinite alternate; }
+@keyframes glow { from { box-shadow: 0 0 0 rgba(232,160,32,0); } to { box-shadow: 0 0 20px rgba(232,160,32,0.15); } }
+.anim-fadein { animation: fadein 0.3s ease-out; }
+@keyframes fadein { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 768px) {
+  .demo-wrap { grid-template-columns: 1fr; }
+  .demo-editor, .demo-output { max-height: 400px; }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .problem-grid, .features-grid { grid-template-columns: 1fr; }
+  .concept-layout { grid-template-columns: 1fr; }
+  .step { grid-template-columns: 48px 1fr; }
+  nav .nav-links { display: none; }
+}
 </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
-  <a class="nav-logo" href="#"><span>~/</span>proto.md</a>
+  <a class="nav-logo" href="#"><span>~/</span>intent-compiler</a>
   <ul class="nav-links">
+    <li><a href="#demo">live demo</a></li>
     <li><a href="#concept">concept</a></li>
     <li><a href="#syntax">syntax</a></li>
     <li><a href="#sdk">mvp</a></li>
     <li><a href="#start">get started</a></li>
-    <li><a href="https://github.com/mikaelcarrara/proto-md" class="nav-cta">github</a></li>
+    <li><a href="https://github.com/mikaelcarrara/intent-compiler" class="nav-cta">github</a></li>
   </ul>
 </nav>
 
@@ -688,6 +812,45 @@
 
 <hr class="divider" />
 
+<!-- DEMO -->
+<section id="demo">
+  <p class="section-label">// live demo</p>
+  <h2 class="section-title">Markdown in. Artifact out.</h2>
+  <p class="section-body">
+    Write your protocol on the left. Watch the resolver emit a structured artifact on the right — in real time.
+  </p>
+
+  <div class="demo-wrap">
+    <div class="demo-editor">
+      <div class="demo-editor-header">
+        <span class="demo-dot demo-dot-r"></span>
+        <span class="demo-dot demo-dot-y"></span>
+        <span class="demo-dot demo-dot-g"></span>
+        <span class="demo-label">protocol.md</span>
+        <span class="demo-badge demo-badge-md">markdown</span>
+      </div>
+      <textarea class="demo-input" id="demo-input" spellcheck="false" autocomplete="off" autocorrect="off" placeholder="Write your protocol here..."></textarea>
+    </div>
+
+    <div class="demo-output">
+      <div class="demo-output-header">
+        <span class="demo-dot demo-dot-r"></span>
+        <span class="demo-dot demo-dot-y"></span>
+        <span class="demo-dot demo-dot-g"></span>
+        <span class="demo-label">output</span>
+        <span class="demo-badge demo-badge-json" id="demo-status-badge">waiting</span>
+      </div>
+      <div class="json-body" id="demo-output">
+        <span class="json-cmt">// click "Resolve" to see the artifact</span>
+      </div>
+    </div>
+  </div>
+
+  <button class="demo-resolve-btn" id="demo-resolve-btn">Resolve →</button>
+</section>
+
+<hr class="divider" />
+
 <!-- CONCEPT -->
 <section id="concept">
   <p class="section-label">// the solution</p>
@@ -703,7 +866,7 @@
       "If your Dockerfile defines what runs, your protocol.md defines how 
       your model thinks. One governs the container. The other governs the cognition."
     </blockquote>
-    <cite>proto.md manifesto</cite>
+    <cite>intent-compiler manifesto</cite>
   </div>
 
   <div class="concept-layout">
@@ -745,33 +908,23 @@
     <!-- PROTOCOL FILE EXAMPLE -->
     <div class="code-window">
       <div class="code-window-tabs">
-        <span class="tab active">performance_analyst.md</span>
+        <span class="tab active">sentiment.md</span>
       </div>
-      <div class="code-body"><span class="s-cmt"># [Protocol] Performance Analyst</span>
-<span class="s-key">Version:</span> <span class="s-val">2.1.0</span>
-<span class="s-key">Model:</span>    <span class="s-val">anthropic/claude-sonnet-4</span>
-<span class="s-key">Author:</span>  <span class="s-val">platform-team</span>
+      <div class="code-body"><span class="s-key">Version:</span> <span class="s-val">1.0.0</span>
+<span class="s-key">Model:</span> <span class="s-val">anthropic/claude-sonnet-4</span>
 
 <span class="s-h2">## Context</span>
-You are a static analysis engine operating via
-semantic inference. You do not guess. You measure.
+You are a sentiment analyst.
 
 <span class="s-h2">## Slots</span>
-<span class="s-slot">{{code_snippet}}</span>  <span class="s-cmt">string — the code to analyze</span>
-<span class="s-slot">{{strictness}}</span>   <span class="s-cmt">int(1..10) — enforcement level</span>
-<span class="s-slot">{{language}}</span>     <span class="s-cmt">string — programming language</span>
-
-<span class="s-h2">## Constraints</span>
-1. Output <span class="s-kw">MUST</span> be valid JSON matching ## Schema
-2. Never suggest external libraries unless asked
-3. Strictness &lt; 5: report only critical issues
-4. Strictness ≥ 5: report all issues found
+<span class="s-slot">{{text}}</span>  <span class="s-cmt">string — text to analyze</span>
+<span class="s-slot">{{lang}}</span>   <span class="s-cmt">string — en | pt | es</span>
 
 <span class="s-h2">## Schema</span>
 <span class="s-str">{</span>
-  <span class="s-key">"score"</span><span class="s-str">:</span>   <span class="s-val">"number(0..100)"</span>,
-  <span class="s-key">"issues"</span><span class="s-str">:</span>  <span class="s-val">"Issue[]"</span>,
-  <span class="s-key">"summary"</span><span class="s-str">:</span> <span class="s-val">"string"</span>
+  <span class="s-key">"sentiment"</span>:   <span class="s-val">"positive | neutral | negative"</span><span class="s-str">,</span>
+  <span class="s-key">"confidence"</span>:  <span class="s-val">"0.0..1.0"</span><span class="s-str">,</span>
+  <span class="s-key">"reasoning"</span>:   <span class="s-val">"string"</span>
 <span class="s-str">}</span></div>
     </div>
   </div>
@@ -793,45 +946,44 @@ semantic inference. You do not guess. You measure.
       <div class="code-window-tabs">
         <span class="tab active">CLI</span>
       </div>
-      <div class="code-body"><span class="s-cmt">$ python cli.py protocols</span>
+      <div class="code-body"><span class="s-cmt">$ python cli.py lint protocols</span>
 
-<span class="s-err">✗</span>  protocols/invalid_protocol.md  <span class="s-err">errors: 2</span>
-  <span class="s-err">Error: Slots usados mas não declarados: {'undeclared'}</span>
-  <span class="s-err">Error: Campos obrigatórios faltando: ['schema']</span>
-<span class="s-ok">✓</span>  protocols/valid_protocol.md    errors: 0
+<span class="s-err">x</span>  protocols/invalid_protocol.md  <span class="s-err">2 errors</span>
+  <span class="s-err">> undeclared slot: {undeclared}</span>
+  <span class="s-err">> missing required field: schema</span>
+<span class="s-ok">v</span>  protocols/valid_protocol.md  <span class="s-ok">0 errors</span>
 
-<span class="s-cmt">2 errors · 0 warnings · 1/2 valid</span></div>
+<span class="s-cmt">1/2 valid  .  exit 1 blocks CI</span></div>
     </div>
 
     <div class="code-window">
       <div class="code-window-tabs">
         <span class="tab active">Quality CI</span>
       </div>
-      <div class="code-body"><span class="s-cmt"># .github/workflows/quality-check.yml</span>
-name: Quality Check
-on: [push, pull_request]
+      <div class="code-body"><span class="s-cmt"># .github/workflows/quality.yml</span>
+<span class="s-key">name:</span> Quality Check
+<span class="s-key">on:</span> [push, pull_request]
 
-jobs:
-  quality:
-    steps:
-      - run: python -m py_compile parser.py validator.py cli.py test_mvp.py
-      - run: python -m unittest -v
-      - run: python cli.py protocols/valid_protocol.md --format json
-      - run: python cli.py protocols/valid_protocol.md --strict --format compact</div>
+<span class="s-key">jobs:</span>
+  <span class="s-key">quality:</span>
+    <span class="s-key">steps:</span>
+      - <span class="s-kw">run:</span> pip install pyyaml jsonschema
+      - <span class="s-kw">run:</span> python -m py_compile parser.py validator.py cli.py
+      - <span class="s-kw">run:</span> python -m unittest -v
+      - <span class="s-kw">run:</span> python cli.py lint protocols/ --strict</div>
     </div>
   </div>
 
   <!-- LINTER -->
   <div class="code-window" style="margin-top: 1.5rem;">
     <div class="code-window-tabs">
-      <span class="tab active">proto-lint MVP — the build check</span>
+      <span class="tab active">intent MVP — the build check</span>
     </div>
-    <div class="code-body"><span class="s-cmt">$ python cli.py protocols --format compact</span>
+    <div class="code-body"><span class="s-cmt">$ python cli.py lint protocols --format compact</span>
 
-<span class="s-ok">✓</span>  protocols/valid_protocol.md: OK
-<span class="s-err">✗</span>  protocols/invalid_protocol.md: <span class="s-err">ERROR - Slots usados mas não declarados: {'undeclared'}</span>
-
-<span class="s-cmt">exit code 1 on errors · CI blocks merge</span></div>
+<span class="s-err">x</span>  invalid_protocol.md <span class="s-err">2e</span> <span class="s-warn">0w</span>
+<span class="s-ok">v</span>  valid_protocol.md  <span class="s-ok">0e</span> <span class="s-warn">0w</span>
+<span class="s-cmt">1/2 valid  .  exit 1 → CI blocks merge</span></div>
   </div>
 </section>
 
@@ -908,8 +1060,8 @@ jobs:
       <span class="step-num">step 03</span>
       <div>
         <h4>Lint before you commit</h4>
-        <p>Run `proto-lint` locally and in CI. If slots are mismatched or schema is missing, the pipeline fails with exit code 1.</p>
-        <code class="code-inline"><span class="s-cmt">$ </span>python cli.py protocols
+        <p>Run `proto lint` locally and in CI. If slots are mismatched or schema is missing, the pipeline fails with exit code 1.</p>
+        <code class="code-inline"><span class="s-cmt">$ </span>python cli.py lint protocols
 <span class="s-cmt">$ </span>python -m unittest -v</code>
       </div>
     </div>
@@ -934,7 +1086,7 @@ jobs:
     Version it. Lint it. Own it.
   </p>
   <div class="hero-actions" style="justify-content:center;">
-    <a href="https://github.com/mikaelcarrara/proto-md" class="btn-primary">View on GitHub →</a>
+    <a href="https://github.com/mikaelcarrara/intent-compiler" class="btn-primary">View on GitHub →</a>
     <a href="#concept" class="btn-secondary">Read the docs</a>
   </div>
 </div>
@@ -942,9 +1094,176 @@ jobs:
 <!-- FOOTER -->
 <hr class="divider" />
 <footer>
-  <div class="logo"><span>~/</span>proto.md</div>
-  <p>2026 <a href="https://www.behance.net/mikaelmcarrara" target="_blank" rel="noopener noreferrer">Mikael Carrara</a>. Released under the <a href="https://github.com/mikaelcarrara/proto-md/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a> · built for the cognitive layer</p>
+  <div class="logo"><span>~/</span>intent.md</div>
+  <p>2026 <a href="https://www.behance.net/mikaelmcarrara" target="_blank" rel="noopener noreferrer">Mikael Carrara</a>. Released under the <a href="https://github.com/mikaelcarrara/intent-compiler/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a> · built for the cognitive layer</p>
 </footer>
+
+<script>
+// ── PROTO-MD RESOLVER (client-side demo) ──
+const SAMPLE_PROTOCOL = `---
+Version: 1.0.0
+Model: anthropic/claude-sonnet-4
+Author: your-team
+Schema:
+  type: object
+  properties:
+    sentiment: { type: string, enum: [positive, neutral, negative] }
+    confidence: { type: number, minimum: 0, maximum: 1 }
+    reasoning: { type: string, minLength: 10 }
+  required: [sentiment, confidence, reasoning]
+---
+
+## Context
+You are a strict sentiment analyst. Reply only with valid JSON matching the schema.
+
+## Slots
+{{text}} string — the text to analyze
+{{lang}} string — language of the text (en, pt, es)
+
+## Constraints
+1. Output MUST be valid JSON.
+2. Confidence must reflect actual certainty.
+3. Never output outside the schema.
+`;
+
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function parseFrontmatter(text) {
+  const m = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!m) return {};
+  const fm = {};
+  m[1].split('\n').forEach(line => {
+    const kv = line.match(/^\s*(\w[\w-]*)\s*:\s*(.*)/);
+    if (kv) fm[kv[1].trim()] = kv[2].trim();
+  });
+  return fm;
+}
+
+function parseSlots(text) {
+  const section = text.match(/## Slots\n([\s\S]*?)(?=\n## |\n---|\n<\/textarea>)/);
+  if (!section) return [];
+  return section[1].trim().split('\n').filter(l => l.trim()).map(l => {
+    const m = l.match(/^\{\{(\w+)\}\}\s+(\w+)(?:\s*[—\-:]\s*(.*))?/);
+    if (!m) return { raw: l.trim() };
+    return { name: m[1], type: m[2], description: (m[3]||'').trim() };
+  });
+}
+
+function parseConstraints(text) {
+  const section = text.match(/## Constraints\n([\s\S]*?)(?=\n## |\n---)/);
+  if (!section) return [];
+  return section[1].trim().split('\n').filter(l => l.trim()).map(l => l.replace(/^\d+\.\s*/, '').trim());
+}
+
+function highlightJSON(obj) {
+  let s = '';
+  s += `<span class="json-cmt">// artifact.json</span>`;
+  s += '<div class="json-artifact">';
+
+  s += '<div class="json-section">';
+  s += `<span class="json-section-label">frontmatter</span>`;
+  s += '<div class="json-inner">';
+  const fm = obj.frontmatter;
+  Object.keys(fm).forEach(k => {
+    const v = fm[k];
+    const isNum = !isNaN(+v) && v.trim() !== '';
+    s += `<div class="json-kv">`;
+    s += `<span class="json-key">"${esc(k)}"</span>`;
+    s += `<span style="color:var(--text-dim)">:</span>`;
+    s += isNum
+      ? `<span class="json-num">${esc(v)}</span>`
+      : `<span class="json-str">"${esc(v)}"</span>`;
+    s += `</div>`;
+  });
+  s += '</div></div>';
+
+  s += '<div class="json-section">';
+  s += `<span class="json-section-label">slots</span>`;
+  s += '<div class="json-inner">';
+  obj.slots.forEach(sl => {
+    s += `<div class="json-kv">`;
+    if (sl.raw) {
+      s += `<span class="json-err">"${esc(sl.raw)}"</span>`;
+    } else {
+      s += `<span style="color:var(--amber-dim)">{</span>`;
+      s += `<span class="json-key">"${esc(sl.name)}"</span>`;
+      s += `<span style="color:var(--text-dim)">,</span>`;
+      s += `<span class="json-key">"${esc(sl.type)}"</span>`;
+      if (sl.description) {
+        s += `<span style="color:var(--text-dim)">,</span>`;
+        s += `<span class="json-str">"${esc(sl.description)}"</span>`;
+      }
+      s += `<span style="color:var(--amber-dim)">}</span>`;
+    }
+    s += `</div>`;
+  });
+  s += '</div></div>';
+
+  s += '<div class="json-section">';
+  s += `<span class="json-section-label">constraints</span>`;
+  s += '<div class="json-inner">';
+  obj.constraints.forEach(c => {
+    s += `<div class="json-kv">`;
+    s += `<span class="json-str">"${esc(c)}"</span>`;
+    s += `</div>`;
+  });
+  s += '</div></div>';
+
+  const dotClass = obj.valid ? 'json-valid-dot-ok' : 'json-valid-dot-err';
+  const dotChar = obj.valid ? 'valid' : 'invalid';
+  s += `<div class="json-valid-bar">`;
+  s += `<div class="json-valid-dot ${dotClass}"></div>`;
+  s += `<span class="json-valid-text"><span class="${obj.valid ? 'json-ok' : 'json-err'}">"${dotChar}"</span></span>`;
+  s += `</div>`;
+
+  s += '</div>';
+  return s;
+}
+
+function resolve() {
+  const input = document.getElementById('demo-input').value;
+  const badge = document.getElementById('demo-status-badge');
+  const out = document.getElementById('demo-output');
+  const btn = document.getElementById('demo-resolve-btn');
+
+  try {
+    const fm = parseFrontmatter(input);
+    const slots = parseSlots(input);
+    const constraints = parseConstraints(input);
+    const hasErrors = slots.some(s => s.raw) || !fm.Version || !fm.Model;
+
+    const obj = { frontmatter: fm, slots, constraints, valid: !hasErrors };
+    out.innerHTML = highlightJSON(obj);
+
+    if (hasErrors) {
+      badge.textContent = 'errors';
+      badge.className = 'demo-badge json-badge-err';
+      out.classList.add('anim-fadein');
+    } else {
+      badge.textContent = 'valid';
+      badge.className = 'demo-badge json-badge-ok';
+      out.classList.add('anim-glow');
+    }
+    btn.textContent = 'Resolved ✓';
+    setTimeout(() => { btn.textContent = 'Resolve →'; }, 1500);
+  } catch(e) {
+    out.innerHTML = `<span class="json-err">// parse error: ${esc(e.message)}</span>`;
+    badge.textContent = 'error';
+    badge.className = 'demo-badge json-badge-err';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const ta = document.getElementById('demo-input');
+  const btn = document.getElementById('demo-resolve-btn');
+  if (ta && btn) {
+    ta.value = SAMPLE_PROTOCOL;
+    btn.addEventListener('click', resolve);
+  }
+});
+</script>
 
 </body>
 </html>

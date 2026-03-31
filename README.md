@@ -1,10 +1,10 @@
-# proto-md
+# intent-compiler
 
 Protocol-Driven Development toolkit for Markdown-based AI protocols.
 
-`proto-md` defines a structured way to write, parse, and validate protocol files (`.md`) so teams can ship LLM workflows with stronger correctness guarantees.
+`intent-compiler` defines a structured way to write, parse, and validate protocol files (`.md`) so teams can ship LLM workflows with stronger correctness guarantees.
 
-## Why proto-md
+## Why intent-compiler
 
 Prompt workflows often drift over time and break silently. This project introduces protocol contracts in Markdown:
 
@@ -21,7 +21,7 @@ This repository currently includes:
 
 - `parser.py`: Markdown protocol parser with frontmatter and section extraction
 - `validator.py`: JSON Schema and protocol-level validation primitives
-- `cli.py`: `proto-lint` command line interface for file/directory validation
+- `cli.py`: `proto` command line interface (`proto lint` and `proto resolve`)
 - `protocols/`: sample valid and invalid protocol files
 - `test_mvp.py`: automated MVP test suite
 - `SPEC_FRONTMATTER.md`: frontmatter specification
@@ -34,7 +34,7 @@ This repository currently includes:
 ## Repository Layout
 
 ```text
-proto-md/
+intent-compiler/
 ├── cli.py
 ├── parser.py
 ├── protocols/
@@ -115,20 +115,43 @@ validation = SchemaValidator().validate_output(output, schema)
 print(validation.is_valid, validation.errors)
 ```
 
-### Lint protocols from CLI
+### Lint and resolve from CLI
 
 ```bash
-python cli.py protocols
-python cli.py protocols --format compact
-python cli.py protocols --format json
-python cli.py protocols --strict
+python cli.py lint protocols
+python cli.py lint protocols --format compact
+python cli.py lint protocols --format json
+python cli.py lint protocols --strict
+python cli.py lint --init-config
+python cli.py lint --config custom-rules.yaml
 ```
+
+### Configuration
+
+Create a `.intent.yaml` in your project root to customize rules:
+
+```bash
+python cli.py lint --init-config
+python cli.py lint --config custom-rules.yaml
+```
+
+This generates a config with all available rules (PM001–PM007). You can edit the file to disable or change severity of any rule.
 
 Exit codes:
 
 - `0`: no errors
 - `1`: validation errors found
 - `2`: execution/configuration problem (for example, no `.md` file found)
+
+### Resolve a protocol to a structured artifact
+
+```bash
+python cli.py resolve protocols/valid_protocol.md
+python cli.py resolve protocols/valid_protocol.md --output yaml
+python cli.py resolve protocols/valid_protocol.md --output typescript
+python cli.py resolve protocols/valid_protocol.md --prompt
+python cli.py resolve protocols/valid_protocol.md --out artifact.json
+```
 
 ### Run the MVP test suite
 
@@ -159,13 +182,20 @@ Reference documents:
 
 ## Roadmap
 
-Planned milestones include:
+Completed in MVP:
 
-- Full `ProtocolValidator` integration
-- `proto-lint` CLI
-- Strict and machine-readable output modes
-- Python SDK and TypeScript SDK
-- CI quality gates with robust test coverage
+- `proto lint` — validate protocols with table/compact/json output (colorized)
+- `.intent.yaml` configuration with customizable rules
+- `proto resolve` — emit structured artifact (JSON/YAML) from a protocol file
+- Exit codes for CI integration
+- Quality CI pipeline
+
+Planned milestones:
+
+- `proto init` — scaffold a new protocol
+- `proto generate` — emit code/mocks/prompts from a protocol
+- TypeScript SDK
+- VS Code Extension with inline lint and hover
 
 ## License
 

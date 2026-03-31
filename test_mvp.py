@@ -36,7 +36,7 @@ class MvpTests(unittest.TestCase):
         self.assertEqual(result["exit_code"], 1)
 
     def test_cli_main_json_output_returns_zero_for_valid_file(self) -> None:
-        exit_code = main([str(self.valid_file), "--format", "json"])
+        exit_code = main(["lint", str(self.valid_file), "--format", "json"])
         self.assertEqual(exit_code, 0)
 
     def test_discovery_finds_markdown_files(self) -> None:

@@ -37,8 +37,8 @@ jobs:
 
       - name: CLI smoke test valid protocol
         run: |
-          python cli.py protocols/valid_protocol.md --format json
-          python cli.py protocols/valid_protocol.md --strict --format compact
+          python cli.py lint protocols/valid_protocol.md --format json
+          python cli.py lint protocols/valid_protocol.md --strict --format compact
 
       - name: CLI exit-code contract for invalid protocol
-        run: python -c "import subprocess,sys; r=subprocess.run([sys.executable,'cli.py','protocols/invalid_protocol.md','--format','compact']); raise SystemExit(0 if r.returncode==1 else 1)"
+        run: python -c "import subprocess,sys; r=subprocess.run([sys.executable,'cli.py','lint','protocols/invalid_protocol.md','--format','compact']); raise SystemExit(0 if r.returncode==1 else 1)"
